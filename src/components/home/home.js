@@ -9,7 +9,12 @@ export default class Home extends Component {
     return await this.component('home/home', [
       {
         name: "Victor",
-        age: 25
+        age: 25,
+        skills: [
+          { name: "html", level: 100 },
+          { name: "js", level: 95 },
+          { name: "php", level: 98 }
+        ]
       }
     ])
   }
