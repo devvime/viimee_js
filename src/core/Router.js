@@ -28,7 +28,7 @@ export default class Router {
     document.querySelector("#app").innerHTML = await view.render()
   }
   run() {
-    window.addEventListener("popstate", () => Router(this.routes))
+    window.addEventListener("popstate", () => new Router(this.routes))
     document.addEventListener("DOMContentLoaded", () => {
       document.body.addEventListener("click", e => {
         if (e.target.matches("[data-link]")) {
