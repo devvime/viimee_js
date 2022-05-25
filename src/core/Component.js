@@ -14,7 +14,7 @@ export default class Component {
       .then(text => {
         const array = text.split("\n")
         const html = []
-        if (data !== {}) {
+        if (data.length > 0) {
           array.map((line, i) => {
             data.map(paramItem => {
               const param = Object.entries(paramItem)
@@ -26,7 +26,21 @@ export default class Component {
             html.push(line)
           })          
         }
-        return html.join('')
+        return this.template(html.join(''))
       })
+  }
+  template(html) {
+    const template = document.createElement("template")
+    template.innerHTML = html.trim()
+    return template.content.firstElementChild
+  }
+  async loop(target, component, data) {
+    data.map(item => {
+      item.map(async i => {
+        await this.component(component, [i]).then(async res => {
+          await document.querySelector(target).appendChild(res)
+        })
+      })      
+    })
   }
 }

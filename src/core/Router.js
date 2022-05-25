@@ -25,7 +25,8 @@ export default class Router {
   }
   async init(match) {
     const view = new match.route.view(getParams(match))
-    document.querySelector("#app").innerHTML = await view.render()
+    document.querySelector(match.route.target || '#app').innerHTML = ''
+    document.querySelector(match.route.target || '#app').appendChild(await view.render())
   }
   run() {    
     document.addEventListener("DOMContentLoaded", () => {
