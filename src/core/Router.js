@@ -27,16 +27,15 @@ export default class Router {
     const view = new match.route.view(getParams(match))
     document.querySelector("#app").innerHTML = await view.render()
   }
-  run() {
-    window.addEventListener("popstate", () => new Router(this.routes))
+  run() {    
     document.addEventListener("DOMContentLoaded", () => {
+      window.addEventListener("popstate", () => new Router(this.routes))
       document.body.addEventListener("click", e => {
         if (e.target.matches("[data-link]")) {
           e.preventDefault()
           this.navigateTo(e.target.href)
         }
       })
-      new Router(this.routes)
     })
   }
 }

@@ -6,8 +6,7 @@ export default class Home extends Component {
     this.setTitle("Home")
   }
   async render() {
-    return await this.component('home/home', [
-      {
+    return await this.component('home/home', [{
         name: "Victor",
         age: 25,
         skills: [
@@ -15,7 +14,6 @@ export default class Home extends Component {
           { name: "js", level: 95 },
           { name: "php", level: 98 }
         ]
-      }
-    ])
+      }])
   }
 }
