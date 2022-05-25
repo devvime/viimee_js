@@ -7,10 +7,8 @@ export default class Posts extends Component {
     console.log(this.params);
   }
   async render() {
-    return await this.component('posts/post', [
-      {
+    return await this.component('posts/post', {
         id: this.params.id,
-      }
-    ])
+      })
   }
 }

@@ -8,15 +8,17 @@ export default class Component {
   async render() {
     return ""
   }
-  async component(component, data = []) {
+  async component(component, data = {}) {
     return await fetch(`/src/components?file=${component}`)
       .then(response => response.text())
       .then(text => {
         const array = text.split("\n")
         const html = []
-        if (data.length > 0) {
+        if (data !== {}) {
+          const dataLoop = []
+          dataLoop.push(data)
           array.map((line, i) => {
-            data.map(paramItem => {
+            dataLoop.map(paramItem => {
               const param = Object.entries(paramItem)
               param.map(p => {                
                 line = line.replace("{{ "+ p[0] +" }}", p[1])
@@ -34,13 +36,20 @@ export default class Component {
     template.innerHTML = html.trim()
     return template.content.firstElementChild
   }
-  async loop(target, component, data) {
-    data.map(item => {
+  async loop(target, component, data = {}) {
+    const dataLoop = []
+    if (data !== {}) {
+      dataLoop.push(data)
+    }
+    dataLoop.map(item => {
       item.map(async i => {
-        await this.component(component, [i]).then(async res => {
+        await this.component(component, i).then(async res => {
           await document.querySelector(target).appendChild(res)
         })
       })      
     })
+  }
+  async include(target, component) {
+    await document.querySelector(target).appendChild(component)
   }
 }

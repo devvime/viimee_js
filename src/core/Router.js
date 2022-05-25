@@ -1,4 +1,5 @@
 import { pathToRegex, getParams } from "./Utils"
+import Component from "./Component"
 
 export default class Router {
   constructor(routes) {    
@@ -15,13 +16,17 @@ export default class Router {
     })
     let match = this.potentialMatches.find(potentialMatches => potentialMatches.result !== null)
     if (!match) {
-      match = {
-        route: routes[0],
-        result: [location.pathname]
-      }
+      this.notFound()
+      return
     }
     this.init(match)
     this.run()
+  }
+  async notFound() {
+    const view = new Component()
+    const html = await view.component('404/index').then(code => code)
+    document.body.appendChild(html)
+    return
   }
   async init(match) {
     const view = new match.route.view(getParams(match))
