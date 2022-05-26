@@ -1,6 +1,9 @@
+import { encrypt, decrypt } from "./Utils"
+
 export default class Component {
   constructor(params) {
     this.params = params
+    document.addEventListener('click', (e) => this.handleClick(e))
   }
   setTitle(title) {
     document.title = title
@@ -22,8 +25,13 @@ export default class Component {
               const param = Object.entries(paramItem)
               param.map(p => {                
                 line = line.replace("{{ "+ p[0] +" }}", p[1])
-                line = line.replace("{{"+ p[0] +"}}", p[1])
-              })                                      
+                line = line.replace("{{"+ p[0] +"}}", p[1])                
+              })
+              const clickTarget = line.substring(line.indexOf('(click)=') -1, line.lastIndexOf('"'))
+              if (clickTarget.indexOf('(click)') !== -1) {
+                console.log(clickTarget);
+                line = line.replace(clickTarget, ` __style_index='${encrypt(clickTarget)}'`)
+              }
             })
             html.push(line)
           })          
@@ -51,5 +59,11 @@ export default class Component {
   }
   async include(target, component) {
     await document.querySelector(target).appendChild(component)
+  }
+  handleClick(e) {
+    if (e.target.getAttribute('__style_index') !== null) {
+      const callback = decrypt(e.target.getAttribute('__style_index')).split('"')[1]
+      eval(`this.${callback}`)
+    }
   }
 }

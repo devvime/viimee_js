@@ -16,16 +16,9 @@ export default class Home extends Component {
       ]
     }
     const component = await this.component('home/home', data)    
-    await this.loop(component,'#skills','home/skills/skills', data.skills)
-    document.addEventListener('click', (e) => this.handleClick(e))
+    await this.loop(component,'#skills','home/skills/skills', data.skills)    
     return component
-  }
-  handleClick(e) {
-    if (e.target.getAttribute('(click)') !== undefined) {
-      const callback = e.target.getAttribute('(click)')
-      eval(`this.${callback}`)
-    }
-  }
+  }  
   clickTest(name) {
     console.log(name)
   }
