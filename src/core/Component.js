@@ -36,15 +36,15 @@ export default class Component {
     template.innerHTML = html.trim()
     return template.content.firstElementChild
   }
-  async loop(target, component, data = {}) {
+  async loop(documentTarget, target, component, data = {}) {
     const dataLoop = []
     if (data !== {}) {
       dataLoop.push(data)
     }
     dataLoop.map(item => {
       item.map(async i => {
-        await this.component(component, i).then(async res => {
-          await document.querySelector(target).appendChild(res)
+        await this.component(component, i).then(res => {
+          documentTarget.querySelector(target).appendChild(res)
         })
       })      
     })
