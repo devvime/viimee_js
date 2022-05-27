@@ -1,4 +1,4 @@
-export const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$")
+export const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 export const getParams = match => {
   if (match.result === undefined) {
     return
@@ -9,17 +9,17 @@ export const getParams = match => {
     return [key, values[i]]
   }))
 }
-const strval = 'assbdFbdpdPdpfPdAAdpeoseslsQQEcDDldiVVkadiedkdkLLnm'
-export const encrypt = (dados) => {
+const strval = "dhdrhdrhdjjhbjnjnjnjnj|_||__/\\/xdfgrg--===\=|="
+export const encrypt = (data) => {
 	let mensx="";
 	let l;
 	let i;
 	let j=0;
 	let ch;
 	ch = strval;
-	for (i=0;i<dados.length; i++){
+	for (i=0;i<data.length; i++){
 		j++;
-		l=(Asc(dados.substr(i,1))+(Asc(ch.substr(j,1))));
+		l=(Asc(data.substr(i,1))+(Asc(ch.substr(j,1))));
 		if (j==50){
 			j=1;
 		}
@@ -28,18 +28,19 @@ export const encrypt = (dados) => {
 		}
 		mensx+=(Chr(l));
 	}
-	return mensx;
+	return btoa(mensx);
 }
-export const decrypt = (dados) => {
+export const decrypt = (data) => {
+	data = atob(data)
 	let mensx="";
 	let l;
 	let i;
 	let j=0;
 	let ch;
 	ch = strval;
-	for (i=0; i<dados.length;i++){
+	for (i=0; i<data.length;i++){
 		j++;
-		l=(Asc(dados.substr(i,1))-(Asc(ch.substr(j,1))));
+		l=(Asc(data.substr(i,1))-(Asc(ch.substr(j,1))));
 		if (j==50){
 			j=1;
 		}
@@ -50,9 +51,7 @@ export const decrypt = (dados) => {
 	}
 	return mensx;
 }
-export const Asc = (String) => {
-	return String.charCodeAt(0);
-}
-export const Chr = (AsciiNum) => {
-	return String.fromCharCode(AsciiNum)
-}
+const Asc = (String) => String.charCodeAt(0);
+const Chr = (AsciiNum) => String.fromCharCode(AsciiNum);
+export const uint8arrayEncode = (value) => new TextEncoder("utf-8").encode(value);
+export const uint8arrayDecode = (value) => new TextDecoder().decode(value);

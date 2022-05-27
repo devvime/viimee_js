@@ -1,9 +1,10 @@
 import { encrypt, decrypt } from "./Utils"
 
 export default class Component {
-  constructor(params) {
+  constructor(params, clickEvent) {
     this.params = params
-    document.addEventListener('click', (e) => this.handleClick(e))
+    this.clickEvent = clickEvent
+    document.addEventListener('click', (e) => this.handleClick(e, this.clickEvent))
   }
   setTitle(title) {
     document.title = title
@@ -27,10 +28,9 @@ export default class Component {
                 line = line.replace("{{ "+ p[0] +" }}", p[1])
                 line = line.replace("{{"+ p[0] +"}}", p[1])                
               })
-              const clickTarget = line.substring(line.indexOf('(click)=') -1, line.lastIndexOf('"'))
+              const clickTarget = line.substring(line.indexOf('(click)=') - 1, line.lastIndexOf('"') + 1)
               if (clickTarget.indexOf('(click)') !== -1) {
-                console.log(clickTarget);
-                line = line.replace(clickTarget, ` __style_index='${encrypt(clickTarget)}'`)
+                line = line.replace(clickTarget, ` _style_index='${encrypt(clickTarget)}'`)                
               }
             })
             html.push(line)
@@ -58,12 +58,18 @@ export default class Component {
     })
   }
   async include(target, component) {
-    await document.querySelector(target).appendChild(component)
+    await component.querySelector(target).appendChild(component)
   }
-  handleClick(e) {
-    if (e.target.getAttribute('__style_index') !== null) {
-      const callback = decrypt(e.target.getAttribute('__style_index')).split('"')[1]
-      eval(`this.${callback}`)
+  handleClick(e, component) {
+    if (component === undefined) {
+      document.removeEventListener('click', e)
+      return
+    }
+    if (e.target.getAttribute('_style_index') !== null) {
+      const callback = decrypt(e.target.getAttribute('_style_index')).split('"')[1]
+      if (component.prototype !== undefined) {
+        eval(`component.prototype.${(callback)}`)
+      }                
     }
   }
 }
