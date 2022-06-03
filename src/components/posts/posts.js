@@ -1,4 +1,5 @@
 import Component from "../../core/Component";
+import post from './post.html'
 
 export default class Posts extends Component {
   constructor(params) {
@@ -7,8 +8,8 @@ export default class Posts extends Component {
     console.log(this.params);
   }
   async render() {
-    return await this.component('posts/post', {
+    return await this.component(post, {
         id: this.params.id,
-      })
+    })
   }
 }

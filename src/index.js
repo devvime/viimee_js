@@ -4,7 +4,7 @@ import Home from './components/home/home'
 import Posts from './components/posts/posts'
 
 new Router([
-  { path: "/", target: "#app", view: Home },
+  { path: "/", view: Home },
   { path: "/posts", view: Posts },
-  { path: "/posts/:id", target: "#app", view: Posts }
+  { path: "/posts/:id", view: Posts }
 ])

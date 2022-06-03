@@ -1,10 +1,10 @@
 import { encrypt, decrypt } from "./Utils"
 
 export default class Component {
-  constructor(params, clickEvent) {
+  constructor(params) {
     this.params = params
-    this.clickEvent = clickEvent
-    document.addEventListener('click', (e) => this.handleClick(e, this.clickEvent))
+    this.clickEvent
+    this.addClickEvent()
   }
   setTitle(title) {
     document.title = title
@@ -13,31 +13,27 @@ export default class Component {
     return ""
   }
   async component(component, data = {}) {
-    return await fetch(`/src/components?file=${component}`)
-      .then(response => response.text())
-      .then(text => {
-        const array = text.split("\n")
-        const html = []
-        if (data !== {}) {
-          const dataLoop = []
-          dataLoop.push(data)
-          array.map((line, i) => {
-            dataLoop.map(paramItem => {
-              const param = Object.entries(paramItem)
-              param.map(p => {                
-                line = line.replace("{{ "+ p[0] +" }}", p[1])
-                line = line.replace("{{"+ p[0] +"}}", p[1])                
-              })
-              const clickTarget = line.substring(line.indexOf('(click)=') - 1, line.lastIndexOf('"') + 1)
-              if (clickTarget.indexOf('(click)') !== -1) {
-                line = line.replace(clickTarget, ` _style_index='${encrypt(clickTarget)}'`)                
-              }
-            })
-            html.push(line)
-          })          
-        }
-        return this.template(html.join(''))
+    const array = component.split("\n")
+    const html = []
+    if (data !== {}) {
+      const dataLoop = []
+      dataLoop.push(data)
+      array.map((line, i) => {
+        dataLoop.map(paramItem => {
+          const param = Object.entries(paramItem)
+          param.map(p => {                
+            line = line.replace("{{ "+ p[0] +" }}", p[1])
+            line = line.replace("{{"+ p[0] +"}}", p[1])
+          })
+          const clickTarget = line.substring(line.indexOf('(click)=') - 1, line.lastIndexOf('"') + 1)
+          if (clickTarget.indexOf('(click)') !== -1) {
+            line = line.replace(clickTarget, ` _style_index='${encrypt(clickTarget)}'`)                
+          }
+        })
+        html.push(line)
       })
+    }
+    return this.template(html.join(''))
   }
   template(html) {
     const template = document.createElement("template")
@@ -57,12 +53,17 @@ export default class Component {
       })      
     })
   }
-  async include(target, component) {
-    await component.querySelector(target).appendChild(component)
+  async include(component, target, child) {
+    await component.querySelector(target).appendChild(child)
+  }
+  addClickEvent() {
+    document.addEventListener('click', (e) => this.handleClick(e, this.clickEvent))
+    if (this.clickEvent === undefined) {
+      document.removeEventListener('click', (e) => this.handleClick(e, undefined))
+    }
   }
   handleClick(e, component) {
     if (component === undefined) {
-      document.removeEventListener('click', e)
       return
     }
     if (e.target.getAttribute('_style_index') !== null) {

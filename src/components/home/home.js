@@ -1,4 +1,8 @@
-import Component from "../../core/Component";
+import Component from "../../core/Component"
+import "./home.component.scss"
+import html from "./home.component.html"
+import skills from './skills/index.html'
+import htmlChild from './child/index.html'
 
 export default class Home extends Component {
   constructor(params) {
@@ -17,11 +21,13 @@ export default class Home extends Component {
         { id: 3, name: "php", level: 98 }
       ]
     }
-    const component = await this.component('home/home', data)    
-    await this.loop(component,'#skills','home/skills/skills', data.skills) 
+    const component = await this.component(html, data)
+    await this.loop(component,'#skills', skills, data.skills)
+    const child = await this.component(htmlChild, data)
+    await this.include(component, '#include', child)
     return component
   }  
   clickTest(name) {
-    console.log(name)
+    alert(name)
   }
 }
