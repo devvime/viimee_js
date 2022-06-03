@@ -1,19 +1,10 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h1>Name: {{ name }}</h1>
-            <h1>Age: {{ age }}</h1>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                #loop={skill of data.skills}
-                <div class="box">
-                    <p>Title: {{ skill.name }}</p>
-                    <p>Title: {{ skill.level }}</p>
-                    <hr>
-                </div>
-                #endloop
-            </div>
+            <h1><strong>Name</strong>: {{ name }}</h1>
+            <h1><strong>Age</strong>: {{ age }}</h1>
+            <hr>
+            <div id="skills"></div>
         </div>
     </div>
 </div>

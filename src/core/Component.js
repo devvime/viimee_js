@@ -1,6 +1,10 @@
+import { encrypt, decrypt } from "./Utils"
+
 export default class Component {
-  constructor(params) {
+  constructor(params, clickEvent) {
     this.params = params
+    this.clickEvent = clickEvent
+    document.addEventListener('click', (e) => this.handleClick(e, this.clickEvent))
   }
   setTitle(title) {
     document.title = title
@@ -8,58 +12,64 @@ export default class Component {
   async render() {
     return ""
   }
-  async component(component, data = []) {
+  async component(component, data = {}) {
     return await fetch(`/src/components?file=${component}`)
       .then(response => response.text())
       .then(text => {
         const array = text.split("\n")
         const html = []
         if (data !== {}) {
+          const dataLoop = []
+          dataLoop.push(data)
           array.map((line, i) => {
-            data.map(paramItem => {
+            dataLoop.map(paramItem => {
               const param = Object.entries(paramItem)
               param.map(p => {                
                 line = line.replace("{{ "+ p[0] +" }}", p[1])
-                line = line.replace("{{"+ p[0] +"}}", p[1])
-              })                                      
+                line = line.replace("{{"+ p[0] +"}}", p[1])                
+              })
+              const clickTarget = line.substring(line.indexOf('(click)=') - 1, line.lastIndexOf('"') + 1)
+              if (clickTarget.indexOf('(click)') !== -1) {
+                line = line.replace(clickTarget, ` _style_index='${encrypt(clickTarget)}'`)                
+              }
             })
             html.push(line)
           })          
         }
-        
-        //loop
-        if (html.join('').indexOf("#loop") !== -1) {
-          data = data.shift()
-          const loopTpl = html.join('').split("#loop")[1].split("#endloop")[0]                
-          const newTpl = ""
-
-          const rule = loopTpl.split('={')[1].split('}')[0]
-          const letRule = rule.split(' ')[0]        
-          .replace(' ','').replace('{{','').replace('}}','').replace('<p>','').replace('</p>','').replace('\r','').replace('}}</p>\r','').split('.')
-
-          const params = []
-          loopTpl.split("\r").map(x => {
-            const line = x
-            const getParam = x.substring(x.indexOf("}}"), x.lastIndexOf('{{') +3).replace(' ','').replace('={','')          
-            if (getParam !== undefined && getParam !== ' ' && getParam !== '') {
-              params.push(getParam)
-            }
-          })
-
-          console.log(params);
-
-          const runLoop = `
-            for (let ${letRule} of ${rule.split(" ")[2]}) {
-              newTpl += loopTpl.replace("={${rule}}","")            
-            }
-          `
-          eval(runLoop)                
-          //endloop
-
-          return html.join('').replace(loopTpl, newTpl).replace("#loop", "").replace("#endloop", "")
-        } else {
-          return html.join('')
-        }       
+        return this.template(html.join(''))
       })
+  }
+  template(html) {
+    const template = document.createElement("template")
+    template.innerHTML = html.trim()
+    return template.content.firstElementChild
+  }
+  async loop(documentTarget, target, component, data = {}) {
+    const dataLoop = []
+    if (data !== {}) {
+      dataLoop.push(data)
+    }
+    dataLoop.map(item => {
+      item.map(async i => {
+        await this.component(component, i).then(res => {
+          documentTarget.querySelector(target).appendChild(res)
+        })
+      })      
+    })
+  }
+  async include(target, component) {
+    await component.querySelector(target).appendChild(component)
+  }
+  handleClick(e, component) {
+    if (component === undefined) {
+      document.removeEventListener('click', e)
+      return
+    }
+    if (e.target.getAttribute('_style_index') !== null) {
+      const callback = decrypt(e.target.getAttribute('_style_index')).split('"')[1]
+      if (component.prototype !== undefined) {
+        eval(`component.prototype.${(callback)}`)
+      }                
+    }
   }
 }
