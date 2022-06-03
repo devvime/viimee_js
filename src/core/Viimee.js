@@ -47,9 +47,8 @@ export default class Viimee {
     }
     dataLoop.map(item => {
       item.map(async i => {
-        await this.component(component, i).then(res => {
-          documentTarget.querySelector(target).appendChild(res)
-        })
+        const html = await this.component(component, i)
+        documentTarget.querySelector(target).appendChild(html)
       })      
     })
   }
