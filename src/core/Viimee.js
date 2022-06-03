@@ -1,6 +1,6 @@
 import { encrypt, decrypt } from "./Utils"
 
-export default class Component {
+export default class Viimee {
   constructor(params) {
     this.params = params
     this.clickEvent

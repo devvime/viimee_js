@@ -1,10 +1,10 @@
-import Component from "../../core/Component"
+import Viimee from "../../core/Viimee"
 import "./home.component.scss"
 import html from "./home.component.html"
 import skills from './skills/index.html'
 import htmlChild from './child/index.html'
 
-export default class Home extends Component {
+export default class Home extends Viimee {
   constructor(params) {
     super(params);
     this.clickEvent = super(this.clickEvent)

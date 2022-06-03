@@ -1,7 +1,7 @@
-import Component from "../../core/Component";
+import Viimee from "../../core/Viimee";
 import post from './post.html'
 
-export default class Posts extends Component {
+export default class Posts extends Viimee {
   constructor(params) {
     super(params);
     this.setTitle("Posts")
