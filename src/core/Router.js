@@ -1,5 +1,6 @@
-import { pathToRegex, getParams } from "./Utils"
-import Component from "./Component"
+import { pathToRegex, getParams } from './Utils'
+import Viimee from "./Viimee"
+import html404 from '../components/404/index.html' 
 
 export default class Router {
   constructor(routes) {    
@@ -23,8 +24,8 @@ export default class Router {
     this.run()
   }
   async notFound() {
-    const view = new Component()
-    const html = await view.component('404/index').then(code => code)
+    const view = new Viimee()
+    const html = await view.component(html404)
     document.body.appendChild(html)
     return
   }

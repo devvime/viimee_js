@@ -8,7 +8,8 @@ module.exports = {
   },
   mode: 'development',
   module: {
-    rules: [{
+    rules: [
+      {
       test: /\.m?js$/,
       exclude: /node_modules/,
       use: {
@@ -17,6 +18,23 @@ module.exports = {
           presets: ['@babel/preset-env']
         }
       }
-    }]
-  }
+    },
+    {
+      use: ["style-loader", "css-loader", "sass-loader"],
+      test: /.(css|sass|scss)$/,
+    },
+    {
+      use: ["html-loader"],
+      test: /\.html$/i,
+    },
+  ]
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    compress: true,
+    port: 5050,
+    open: true,
+  },
 };
