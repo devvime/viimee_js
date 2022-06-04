@@ -1,4 +1,5 @@
-import Viimee from "../../core/Viimee"
+import Viimee from '../../core/Viimee'
+import { clickEvent } from '../../core/ClickEvent'
 import "./home.component.scss"
 import html from "./home.component.html"
 import skills from './skills/index.html'
@@ -6,10 +7,9 @@ import htmlChild from './child/index.html'
 
 export default class Home extends Viimee {
   constructor(params) {
-    super(params);
-    this.clickEvent = super(this.clickEvent)
-    this.clickEvent = Home
+    super(params);    
     this.setTitle("Home")
+    clickEvent(Home)
   }
   async render() {
     const data = {
@@ -17,6 +17,7 @@ export default class Home extends Viimee {
       age: 25,
       skills: [
         { id: 1, name: "html", level: 100 },
+        { id: 2, name: "css", level: 100 },
         { id: 2, name: "js", level: 95 },
         { id: 3, name: "php", level: 98 }
       ]

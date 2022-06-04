@@ -3,8 +3,6 @@ import { encrypt, decrypt } from "./Utils"
 export default class Viimee {
   constructor(params) {
     this.params = params
-    this.clickEvent
-    this.addClickEvent()
   }
   setTitle(title) {
     document.title = title
@@ -54,22 +52,5 @@ export default class Viimee {
   }
   async include(component, target, child) {
     await component.querySelector(target).appendChild(child)
-  }
-  addClickEvent() {
-    document.addEventListener('click', (e) => this.handleClick(e, this.clickEvent))
-    if (this.clickEvent === undefined) {
-      document.removeEventListener('click', (e) => this.handleClick(e, undefined))
-    }
-  }
-  handleClick(e, component) {
-    if (component === undefined) {
-      return
-    }
-    if (e.target.getAttribute('_style_index') !== null) {
-      const callback = decrypt(e.target.getAttribute('_style_index')).split('"')[1]
-      if (component.prototype !== undefined) {
-        eval(`component.prototype.${(callback)}`)
-      }                
-    }
   }
 }
