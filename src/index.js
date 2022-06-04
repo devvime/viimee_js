@@ -5,7 +5,6 @@ import Posts from './components/posts/posts'
 
 const routes = [
   { path: "/", view: Home },
-  { path: "/posts", view: Posts },
   { path: "/posts/:id", view: Posts }
 ]
 
