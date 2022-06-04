@@ -1,5 +1,6 @@
 import Viimee from "../../core/Viimee";
 import post from './post.html'
+import './post.scss'
 
 export default class Posts extends Viimee {
   constructor(params) {

@@ -1,7 +1,7 @@
 import Viimee from '../../core/Viimee'
 import { clickEvent } from '../../core/ClickEvent'
-import "./home.component.scss"
-import html from "./home.component.html"
+import "./home.scss"
+import html from "./home.html"
 import skills from './skills/index.html'
 import htmlChild from './child/index.html'
 
