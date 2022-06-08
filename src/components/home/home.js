@@ -15,6 +15,7 @@ export default class Home extends Viimee {
     const data = {
       name: "Victor",
       age: 25,
+      superUser: false,
       skills: [
         { id: 1, name: "html", level: 100 },
         { id: 2, name: "css", level: 100 },

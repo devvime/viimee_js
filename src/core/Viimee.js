@@ -13,6 +13,7 @@ export default class Viimee {
   async component(component, data = {}) {
     const array = component.split("\n")
     const html = []
+    let tplHtml
     if (data !== {}) {
       const dataLoop = []
       dataLoop.push(data)
@@ -30,8 +31,23 @@ export default class Viimee {
         })
         html.push(line)
       })
+
+      tplHtml = html.join('')
+      const ifTarget = tplHtml.substring(tplHtml.indexOf('[if') + 1, tplHtml.lastIndexOf('[/if]'))
+      if (ifTarget) {
+        let argument = ifTarget.split(']')
+        let dataArgument = argument[0].substring(argument[0].indexOf('(') + 1, argument[0].lastIndexOf(')'))
+        dataArgument = `data.${dataArgument}`
+        eval(`
+        if (${dataArgument}) {
+          tplHtml = tplHtml.replace('['+argument[0]+']', "").replace('[/if]', "")
+        } else {
+          tplHtml = tplHtml.replace(argument[1], '').replace(argument[0], '').replace('[][/if]', '')
+        }
+      `)
+      }
     }
-    return this.template(html.join(''))
+    return this.template(tplHtml)
   }
   template(html) {
     const template = document.createElement("template")

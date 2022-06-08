@@ -3,6 +3,10 @@
         <div class="col-md-12">
             <h1><strong>Name</strong>: {{ name }}</h1>
             <h1><strong>Age</strong>: {{ age }}</h1>
+            [if(superUser)]
+                <h2>Teste do if</h2>
+                <p>Test com p no if</p>
+            [/if]
             <hr>
             <div id="skills"></div>
             <div id="include"></div>
